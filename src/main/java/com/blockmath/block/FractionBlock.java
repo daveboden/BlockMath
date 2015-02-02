@@ -34,7 +34,7 @@ public class FractionBlock extends Block {
 		canPlace = canPlace && super.canPlaceBlockAt(world,  x, y, z);
 		
 		for(int i = 1; canPlace && i < height; i++) {
-    		if(!world.isAirBlock(x, y + i, z)) {
+    		if(!super.canPlaceBlockAt(world, x, y + i, z)) {
     			canPlace = false;
     			break;
     		}

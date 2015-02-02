@@ -1,0 +1,7 @@
+tile.blockmath_OneBlock.name=Whole block
+tile.blockmath_HalfBlock.name=1/2 block
+tile.blockmath_ThirdBlock.name=1/3 block
+tile.blockmath_QuarterBlock.name=1/4 block
+tile.blockmath_FifthBlock.name=1/5 block
+tile.blockmath_SixthBlock.name=1/6 block
+tile.blockmath_TwelthBlock.name=1/12 block

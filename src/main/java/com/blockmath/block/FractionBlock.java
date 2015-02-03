@@ -1,6 +1,8 @@
 package com.blockmath.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -9,36 +11,88 @@ import net.minecraft.world.World;
 
 import com.blockmath.mod.BlockMathMod;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * The metadata on these blocks is:
+ * 0 = lowest
+ * 1 = top
+ * 2 = standard inbetween block
+ * More metadata will be added to label the middle of the block so that it can be specially
+ * decorated with numbers and fraction values.
+ * 
+ * TODO allow blocks to be placed underneath existing blocks. These will have to be created from the top down and, 
+ *      taking slabs into consideration, the bottom and top of a fraction block can a special joined 2slab block.
+ * 
+ * TODO Teleport the user to the top of a superblock if they've jumped and placed the block under them. Otherwise they
+ *      end up in the block and get slowly pushed to the side. The screen goes black for a second or so.
+ */
 public class FractionBlock extends Block {
 
 	private final String name;
 	private final int height;
+	private final int heightInBlocks; //height / 2 with no remainder
+	private final boolean extraHalfBlock;
+	private final SlabManager slabManager; //null if extraHalfBlock is false
 	
 	private IIcon icon0;
 	private IIcon icon;
 	
+	public static final int METADATA_LOWEST_BLOCK = 0;
+	public static final int METADATA_HIGHEST_BLOCK = 1;
+	public static final int METADATA_NORMAL_BLOCK = 2;
+	
 	public FractionBlock(String name, int height) {
+		this(name, height, null);
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+
+	public int getHeightInBlocks() {
+		return heightInBlocks;
+	}
+
+	public boolean isExtraHalfBlock() {
+		return extraHalfBlock;
+	}
+
+
+
+	public FractionBlock(String name, int height, SlabManager slabManager) {
 		super(Material.rock);
 		this.name = name;
 		this.height = height;
+		this.heightInBlocks = height / 2;
+		this.extraHalfBlock = (height % 2) == 1;
+		if(extraHalfBlock && slabManager != null) {
+			//Register this block with the slab manager
+			this.slabManager = slabManager;
+			slabManager.setBlock(this);
+		} else {
+			this.slabManager = null;
+		}
 		setBlockName(BlockMathMod.MODID + "_" + name);
 		setCreativeTab(CreativeTabs.tabDecorations);
 	}
 	
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		boolean canPlace = true;
-		canPlace = canPlace && super.canPlaceBlockAt(world,  x, y, z);
+		boolean canPlace = super.canPlaceBlockAt(world,  x, y, z);
 		
-		for(int i = 1; canPlace && i < height; i++) {
+		for(int i = 1; canPlace && i < heightInBlocks; i++) {
     		if(!super.canPlaceBlockAt(world, x, y + i, z)) {
     			canPlace = false;
     			break;
     		}
     	}
+		
+		if(canPlace && extraHalfBlock) {
+			canPlace = super.canPlaceBlockAt(world, x, y + heightInBlocks, z);
+		}
 		
 		return canPlace;
 	}
@@ -50,8 +104,15 @@ public class FractionBlock extends Block {
 	@Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		//Assume that canPlaceBlockAt has already been called; so no validation left to do.
-		for(int i = 1; i < height; i++) {    			
-			world.setBlock(x, y + i, z, this, i, 3);
+		for(int i = 1; i < heightInBlocks - 1; i++) {    			
+			world.setBlock(x, y + i, z, this, METADATA_NORMAL_BLOCK, 3);
+		}
+		
+		if(extraHalfBlock) {
+			world.setBlock(x, y + heightInBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
+			world.setBlock(x, y + heightInBlocks, z, slabManager.getSlab(), 0, 3);
+		} else {
+			world.setBlock(x, y + heightInBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
 		}
     	
         return metadata;
@@ -68,7 +129,7 @@ public class FractionBlock extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int metadata) {
-    	if(metadata == 0) {
+    	if(metadata == METADATA_LOWEST_BLOCK) {
     		return icon0;
     	}
     	return icon;
@@ -76,14 +137,39 @@ public class FractionBlock extends Block {
 
     //TODO - explosions
     
+    /**
+     * Travel downwards and upwards, destroying blocks as you go until you reach:
+     * * The block with metadata telling you it's the lowest or uppermost block.
+     * * The world vertical limits (0, world.getHeight()) - in case we have some sort bug. Log a warning.
+     * * The maximum possible height of this superblock - in case we have some sort of bug. Log a warning.
+     */
     @Override
-    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata) {
-    	for(int i = 0; i < metadata + 1; i++) {
-    		world.setBlockToAir(x, y - i, z);
+    public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata) {
+    	//Travel downwards if we're not already at the bottom
+    	if(metadata != METADATA_LOWEST_BLOCK) {
+    		for(int currentY = y - 1; currentY >= 0 && y - currentY < heightInBlocks; currentY--) { 
+	    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_LOWEST_BLOCK;
+	    		
+	    		world.setBlockToAir(x, currentY, z);
+	    		
+	    		if(stopHere) {
+	    			break;
+	    		}
+	    	}
     	}
-    	int remaining = height - metadata;
-    	for(int i = 0; i < remaining; i++) {
-    		world.setBlockToAir(x, y + i, z);
+    	
+    	//Travel upwards if we're not already at the top
+    	//TODO or at a top slab
+    	if(metadata != METADATA_HIGHEST_BLOCK) {
+    		for(int currentY = y +1; currentY <= world.getHeight() && currentY - y < heightInBlocks; currentY++) { 
+	    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_HIGHEST_BLOCK;
+	    		
+	    		world.setBlockToAir(x, currentY, z);
+	    		
+	    		if(stopHere) {
+	    			break;
+	    		}
+	    	}    		
     	}
     }
 }

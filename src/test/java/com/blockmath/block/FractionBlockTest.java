@@ -18,20 +18,20 @@ import org.mockito.stubbing.Answer;
 
 public class FractionBlockTest {
 
-	private class AirBlock extends BlockAir {
+	private static class AirBlock extends BlockAir {
 		//Work around protected constructor
 	}
 	
 	private World world;
-	private Block air;
-	private Block stone;
+	private static final Block air = new AirBlock();
+	private static final Block stone = new BlockStone();
 	private StubWorld stubWorld;
 	
 	@Before
 	public void setup() {
 		world = mock(World.class);
 		
-		stubWorld = new StubWorld();
+		stubWorld = new StubWorld(air);
 		
 		final ArgumentCaptor<Integer> xCap = ArgumentCaptor.forClass(Integer.class);
 		final ArgumentCaptor<Integer> yCap = ArgumentCaptor.forClass(Integer.class);
@@ -40,6 +40,20 @@ public class FractionBlockTest {
 			@Override
 			public Block answer(InvocationOnMock invocation) throws Throwable {
 				return stubWorld.getBlock(xCap.getValue(), yCap.getValue(), zCap.getValue());
+			}
+		});
+		
+		when(world.getBlockMetadata(xCap.capture(), yCap.capture(), zCap.capture())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(InvocationOnMock invocation) throws Throwable {
+				return stubWorld.getBlockMetadata(xCap.getValue(), yCap.getValue(), zCap.getValue());
+			}
+		});
+		
+		when(world.setBlockToAir(xCap.capture(), yCap.capture(), zCap.capture())).thenAnswer(new Answer<Boolean>() {
+			@Override
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
+				return stubWorld.setBlockToAir(xCap.getValue(), yCap.getValue(), zCap.getValue());
 			}
 		});
 		
@@ -54,9 +68,6 @@ public class FractionBlockTest {
 				return stubWorld.setBlock(xCap.getValue(), yCap.getValue(), zCap.getValue(), blockCap.getValue(), metaCap.getValue(), flagsCap.getValue());
 			}
 		});
-		
-		air = new AirBlock();
-		stone = new BlockStone();
 	}
 	
 	@Test
@@ -123,6 +134,25 @@ public class FractionBlockTest {
 			quarterBlock.onBlockPlaced(world, startingX, startingY, startingZ, side, hitX, hitY, hitZ, metadata);
 		}
 		
-		assertEquals(quarterSlab, stubWorld.getBlock(startingX, startingY + 7, startingZ));
+		int yFirstSlab = startingY + 7;
+		assertEquals("Check that ths slab has been added to the top of the quarter-block stack",
+				     quarterSlab, stubWorld.getBlock(startingX, yFirstSlab, startingZ));
+		
+		stubWorld.toString();
+		
+		int slabMetadata = stubWorld.getBlockMetadata(startingX, yFirstSlab, startingZ);
+		stubWorld.setBlockToAir(startingX, yFirstSlab, startingZ);
+		quarterSlab.onBlockDestroyedByPlayer(world, startingX, yFirstSlab, startingZ, slabMetadata);
+		
+		assertEquals("Destroying the top slab destroyed the lowest block of the superblock",
+				     air, stubWorld.getBlock(startingX, startingY, startingZ));
+		assertEquals(air, stubWorld.getBlock(startingX, startingY + 1, startingZ));
+		assertEquals(air, stubWorld.getBlock(startingX, startingY + 2, startingZ));
+		assertEquals(air, stubWorld.getBlock(startingX, startingY + 3, startingZ));
+		assertEquals(air, stubWorld.getBlock(startingX, startingY + 4, startingZ));
+		assertEquals(air, stubWorld.getBlock(startingX, startingY + 5, startingZ));
+		assertEquals(air, stubWorld.getBlock(startingX, startingY + 6, startingZ));
 	}
+	
+	//NEXT! Destroying the bottom block doesn't destroy the slab.
 }

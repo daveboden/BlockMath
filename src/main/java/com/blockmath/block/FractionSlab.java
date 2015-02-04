@@ -5,6 +5,7 @@ import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import com.blockmath.mod.BlockMathMod;
 
@@ -37,5 +38,10 @@ public class FractionSlab extends BlockSlab {
     public IIcon getIcon(int side, int metadata)
     {
     	return slabManager.getBlock().getIcon(side, FractionBlock.METADATA_NORMAL_BLOCK);
+    }
+    
+    @Override
+    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata) {
+    	slabManager.getBlock().destroyMiddleBlocksBelow(world, x, y, z);
     }
 }

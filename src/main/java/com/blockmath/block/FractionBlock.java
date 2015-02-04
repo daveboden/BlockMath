@@ -33,7 +33,7 @@ public class FractionBlock extends Block {
 
 	private final String name;
 	private final int height;
-	private final int heightInBlocks; //height / 2 with no remainder
+	private final int heightInWholeBlocks; //height / 2 with no remainder
 	private final boolean extraHalfBlock;
 	private final SlabManager slabManager; //null if extraHalfBlock is false
 	
@@ -53,7 +53,7 @@ public class FractionBlock extends Block {
 	}
 
 	public int getHeightInBlocks() {
-		return heightInBlocks;
+		return heightInWholeBlocks;
 	}
 
 	public boolean isExtraHalfBlock() {
@@ -66,7 +66,7 @@ public class FractionBlock extends Block {
 		super(Material.rock);
 		this.name = name;
 		this.height = height;
-		this.heightInBlocks = height / 2;
+		this.heightInWholeBlocks = height / 2;
 		this.extraHalfBlock = (height % 2) == 1;
 		if(extraHalfBlock && slabManager != null) {
 			//Register this block with the slab manager
@@ -83,7 +83,7 @@ public class FractionBlock extends Block {
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 		boolean canPlace = super.canPlaceBlockAt(world,  x, y, z);
 		
-		for(int i = 1; canPlace && i < heightInBlocks; i++) {
+		for(int i = 1; canPlace && i < heightInWholeBlocks; i++) {
     		if(!super.canPlaceBlockAt(world, x, y + i, z)) {
     			canPlace = false;
     			break;
@@ -91,7 +91,7 @@ public class FractionBlock extends Block {
     	}
 		
 		if(canPlace && extraHalfBlock) {
-			canPlace = super.canPlaceBlockAt(world, x, y + heightInBlocks, z);
+			canPlace = super.canPlaceBlockAt(world, x, y + heightInWholeBlocks, z);
 		}
 		
 		return canPlace;
@@ -104,15 +104,15 @@ public class FractionBlock extends Block {
 	@Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		//Assume that canPlaceBlockAt has already been called; so no validation left to do.
-		for(int i = 1; i < heightInBlocks - 1; i++) {    			
+		for(int i = 1; i < heightInWholeBlocks - 1; i++) {    			
 			world.setBlock(x, y + i, z, this, METADATA_NORMAL_BLOCK, 3);
 		}
 		
 		if(extraHalfBlock) {
-			world.setBlock(x, y + heightInBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
-			world.setBlock(x, y + heightInBlocks, z, slabManager.getSlab(), 0, 3);
+			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
+			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getSlab(), 0, 3);
 		} else {
-			world.setBlock(x, y + heightInBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
+			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
 		}
     	
         return metadata;
@@ -147,21 +147,13 @@ public class FractionBlock extends Block {
     public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata) {
     	//Travel downwards if we're not already at the bottom
     	if(metadata != METADATA_LOWEST_BLOCK) {
-    		for(int currentY = y - 1; currentY >= 0 && y - currentY < heightInBlocks; currentY--) { 
-	    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_LOWEST_BLOCK;
-	    		
-	    		world.setBlockToAir(x, currentY, z);
-	    		
-	    		if(stopHere) {
-	    			break;
-	    		}
-	    	}
+    		destroyMiddleBlocksBelow(world, x, y, z);
     	}
     	
     	//Travel upwards if we're not already at the top
     	//TODO or at a top slab
     	if(metadata != METADATA_HIGHEST_BLOCK) {
-    		for(int currentY = y +1; currentY <= world.getHeight() && currentY - y < heightInBlocks; currentY++) { 
+    		for(int currentY = y +1; currentY <= world.getHeight() && currentY - y < heightInWholeBlocks; currentY++) { 
 	    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_HIGHEST_BLOCK;
 	    		
 	    		world.setBlockToAir(x, currentY, z);
@@ -170,6 +162,18 @@ public class FractionBlock extends Block {
 	    			break;
 	    		}
 	    	}    		
+    	}
+    }
+    
+    public void destroyMiddleBlocksBelow(final World world, final int x, final int y, final int z) {
+		for(int currentY = y - 1; currentY >= 0 && y - currentY < heightInWholeBlocks + 1; currentY--) { 
+    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_LOWEST_BLOCK;
+    		
+    		world.setBlockToAir(x, currentY, z);
+    		
+    		if(stopHere) {
+    			break;
+    		}
     	}
     }
 }

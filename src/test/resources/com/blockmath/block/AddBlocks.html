@@ -1,0 +1,74 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+    <head>
+        <link href="../concordion.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <h1>Simple add block to air</h1>
+        <p>
+        With blocks at:
+        
+        <table concordion:execute="setBlock(#x, #y, #z, #type)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:set="#type">Type</th>
+            </tr>
+            <tr><td>6</td><td>71</td><td>7</td><td>stone</td></tr>
+            <tr><td>6</td><td>70</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>69</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>68</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>67</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>66</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>65</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>64</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>63</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>62</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>61</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>60</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>59</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>58</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>57</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>56</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>55</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>54</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>53</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>52</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>51</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>50</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>49</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>48</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>47</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>46</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>45</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>44</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>43</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>42</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>41</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>40</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>39</td><td>7</td><td>stone</td></tr>
+        </table>
+        </p>
+        
+        <p concordion:assertTrue='canPlaceAt(#blockType, #xyz)'>Can place block type <span concordion:set="#blockType">whole_fraction</span> at
+        <span concordion:set="#xyz">(6, 40, 7)</span>
+        </p>  
+        <p>The whole fraction block is 60 units high which equates to 60 slabs or 30 whole blocks in Minecraft.</p>
+        
+    <h1>Stone obstruction stops the block being placed</h1>
+    
+        <p>
+        <span concordion:execute="setBlock(#xyz, #type)">If a <span concordion:set="#type">stone</span> obstruction is placed at
+        <span concordion:set="#xyz">(6, 60, 7)</span>
+        </span>
+        then a <span concordion:assertFalse='canPlaceAt(#blockType, #xyz)'> block type <span concordion:set="#blockType">whole_fraction</span>
+        can no longer be placed at
+        <span concordion:set="#xyz">(6, 40, 7)</span>
+        </span>
+        </p>
+        
+    </body>
+    
+</html>

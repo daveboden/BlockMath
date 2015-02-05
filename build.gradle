@@ -29,8 +29,10 @@ minecraft {
 dependencies {
     testCompile "junit:junit:4.+"
     testCompile "org.mockito:mockito-core:1.+"
+    testCompile "org.concordion:concordion:1.4.+"
     
     compile "org.projectlombok:lombok:1.16.+"
+    
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

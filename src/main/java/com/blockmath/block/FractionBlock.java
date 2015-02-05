@@ -81,7 +81,17 @@ public class FractionBlock extends Block {
 	
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		boolean canPlace = super.canPlaceBlockAt(world,  x, y, z);
+		boolean canPlace;
+		boolean extraHalfBlockAtBottom;
+		
+		Block targetBlock = world.getBlock(x, y, z);
+		if(targetBlock instanceof FractionSlab) {
+			canPlace = true;
+			extraHalfBlockAtBottom = true;
+		} else {
+			canPlace = super.canPlaceBlockAt(world, x, y, z);
+			extraHalfBlockAtBottom = false;
+		}
 		
 		for(int i = 1; canPlace && i < heightInWholeBlocks; i++) {
     		if(!super.canPlaceBlockAt(world, x, y + i, z)) {
@@ -90,7 +100,9 @@ public class FractionBlock extends Block {
     		}
     	}
 		
-		if(canPlace && extraHalfBlock) {
+		//We only need the extra block (half block) at the top if it's not being
+		//added as a join at the bottom of the superblock.
+		if(canPlace && extraHalfBlock && !extraHalfBlockAtBottom) {
 			canPlace = super.canPlaceBlockAt(world, x, y + heightInWholeBlocks, z);
 		}
 		
@@ -104,13 +116,19 @@ public class FractionBlock extends Block {
 	@Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		//Assume that canPlaceBlockAt has already been called; so no validation left to do.
+		
+		Block targetBlock = world.getBlock(x, y, z);
+		if(targetBlock instanceof FractionSlab) {
+			
+		}
+		
 		for(int i = 1; i < heightInWholeBlocks - 1; i++) {    			
 			world.setBlock(x, y + i, z, this, METADATA_NORMAL_BLOCK, 3);
 		}
 		
 		if(extraHalfBlock) {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
-			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getSlab(), 0, 3);
+			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getSlab(), METADATA_HIGHEST_BLOCK, 3);
 		} else {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
 		}
@@ -141,7 +159,6 @@ public class FractionBlock extends Block {
      * Travel downwards and upwards, destroying blocks as you go until you reach:
      * * The block with metadata telling you it's the lowest or uppermost block.
      * * The world vertical limits (0, world.getHeight()) - in case we have some sort bug. Log a warning.
-     * * The maximum possible height of this superblock - in case we have some sort of bug. Log a warning.
      */
     @Override
     public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata) {
@@ -153,7 +170,14 @@ public class FractionBlock extends Block {
     	//Travel upwards if we're not already at the top
     	//TODO or at a top slab
     	if(metadata != METADATA_HIGHEST_BLOCK) {
-    		for(int currentY = y +1; currentY <= world.getHeight() && currentY - y < heightInWholeBlocks; currentY++) { 
+    		for(int currentY = y + 1; currentY <= world.getHeight(); currentY++) {
+    			Block block = world.getBlock(x, currentY, z);
+    			boolean fractionBlock = block instanceof FractionBlock || block instanceof FractionSlab;
+    			if(!fractionBlock) {
+    				//Shouldn't happen. We shouldn't run out of fraction blocks before we've hit the labelled highest block
+    				break;
+    			}
+    			
 	    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_HIGHEST_BLOCK;
 	    		
 	    		world.setBlockToAir(x, currentY, z);

@@ -34,18 +34,21 @@ public class StubWorld {
 		}
 	}
 	
-	@Data
-	private class BlockData {
-		private final Block block;
-		private final int metadata;
-	}
-	
 	public Block getBlock(int x, int y, int z) {
 		return blocks.get(new BlockKey(x, y, z)).getBlock();
 	}
 	
 	public int getBlockMetadata(int x, int y, int z) {
 		return blocks.get(new BlockKey(x, y, z)).getMetadata();
+	}
+	
+	/**
+	 * Convenience method (not available in the World interface) to get hold of both the block
+	 * and its metadata in a single call.
+	 * @return
+	 */
+	public BlockData getBlockAndMetadata(int x, int y, int z) {
+		return blocks.get(new BlockKey(x, y, z));
 	}
 
     public boolean setBlock(int x, int y, int z, Block block) {

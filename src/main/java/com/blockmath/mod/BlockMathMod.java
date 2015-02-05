@@ -39,10 +39,10 @@ public class BlockMathMod
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-    	oneBlock = createBlockAndRegister("OneBlock", 60);
-    	halfBlock = createBlockAndRegister("HalfBlock", 30);
-    	thirdBlock = createBlockAndRegister("ThirdBlock", 20);
-    	fifthBlock = createBlockAndRegister("FifthBlock", 12);
+    	oneBlock = createBlockAndRegister("OneBlock", 60); //Decoration on block offset 14 and 15
+    	halfBlock = createBlockAndRegister("HalfBlock", 30); //Decoration on block offset 7
+    	thirdBlock = createBlockAndRegister("ThirdBlock", 20); //Decoration on block offset 4 and 5
+    	fifthBlock = createBlockAndRegister("FifthBlock", 12); //
     	sixthBlock = createBlockAndRegister("SixthBlock", 10);
     	twelthBlock = createBlockAndRegister("TwelthBlock", 5);
     	

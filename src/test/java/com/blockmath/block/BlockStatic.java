@@ -18,7 +18,7 @@ public class BlockStatic {
 	public static final WholeFractionBlock oneBlock = new WholeFractionBlock();
 	private static final SlabManager quarterSlabManager = new SlabManager();
 	public static final QuarterFractionBlock quarterBlock = new QuarterFractionBlock(quarterSlabManager);
-	public static final FractionSlab quarterSlab = new FractionSlab("QuarterSlab", quarterSlabManager);
+	public static final FractionSlab quarterSlab = new FractionSlab("QuarterSlab", 15, quarterSlabManager);
 	
 	public static BiMap<String, Block> blocksByName = HashBiMap.create();
 	static {

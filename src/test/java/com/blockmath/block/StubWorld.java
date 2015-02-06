@@ -65,6 +65,14 @@ public class StubWorld {
     	return true;
     }
     
+    public boolean setMetadata(int x, int y, int z, int metadata) {
+    	BlockKey blockKey = new BlockKey(x, y, z);
+    	BlockData blockData = blocks.get(blockKey);
+    	BlockData blockDataNew = new BlockData(blockData.getBlock(), metadata);
+    	blocks.replace(blockKey, blockData, blockDataNew);
+    	return true;
+    }
+    
     public boolean setBlockToAir(int x, int y, int z) {
         return this.setBlock(x, y, z, air, 0, 3);
     }

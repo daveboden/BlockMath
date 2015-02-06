@@ -7,6 +7,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -66,6 +67,13 @@ public class StubWorldFactory {
 			public Boolean answer(InvocationOnMock invocation) throws Throwable {
 				return stubWorld.setBlock(xCap.getValue(), yCap.getValue(), zCap.getValue(), blockCap.getValue(), metaCap.getValue(), flagsCap.getValue());
 			}
+		});
+		
+		when(world.setBlockMetadataWithNotify(xCap.capture(), yCap.capture(), zCap.capture(), metaCap.capture(), Matchers.anyInt())).then(new Answer<Boolean>() {
+			@Override
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
+				return stubWorld.setMetadata(xCap.getValue(), yCap.getValue(), zCap.getValue(), metaCap.getValue());
+			}			
 		});
 		
 		return stubWorld;

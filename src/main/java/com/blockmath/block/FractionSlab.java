@@ -1,9 +1,8 @@
 package com.blockmath.block;
 
-import net.minecraft.block.Block;
+import lombok.Getter;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -12,14 +11,24 @@ import com.blockmath.mod.BlockMathMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * Slab forming a half-block at the top of a superblock if there's an odd number
+ * (e.g. a quarter block is 15 units high which is 7.5 minecraft blocks).
+ * 
+ * Not added to the creative menu.
+ */
 public class FractionSlab extends BlockSlab {
 	
+	@Getter
 	private final String name;
+	@Getter
+	private final int numerator;
 	private final SlabManager slabManager;
 	
-	public FractionSlab(String name, SlabManager slabManager) {
+	public FractionSlab(String name, int numerator, SlabManager slabManager) {
 		super(false, Material.rock);
 		this.name = name;
+		this.numerator = numerator;
 		this.slabManager = slabManager;
 		slabManager.setSlab(this);
 		setBlockName(BlockMathMod.MODID + "_" + name);

@@ -1,5 +1,6 @@
 package com.blockmath.block;
 
+import lombok.Getter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStoneSlab;
@@ -10,6 +11,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.blockmath.mod.BlockMathMod;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -32,8 +35,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class FractionBlock extends Block {
 
 	private final String name;
-	private final int height;
+	@Getter
+	private final int numerator;
+	@Getter
 	private final int heightInWholeBlocks; //height / 2 with no remainder
+	@Getter
 	private final boolean extraHalfBlock;
 	private final SlabManager slabManager; //null if extraHalfBlock is false
 	
@@ -43,31 +49,47 @@ public class FractionBlock extends Block {
 	public static final int METADATA_LOWEST_BLOCK = 0;
 	public static final int METADATA_HIGHEST_BLOCK = 1;
 	public static final int METADATA_NORMAL_BLOCK = 2;
+	//Tag the middle blocks in a superblock for decorative purposes
+	public static final int METADATA_MIDDLE_BLOCK = 3;
+	public static final int METADATA_MIDDLE_UPPER_BLOCK = 4;
+	
+	public static final int METADATA_JOIN_WITH_WHOLE_BLOCK = 5;
+	public static final int METADATA_JOIN_WITH_HALF_BLOCK = 6;
+	public static final int METADATA_JOIN_WITH_THIRD_BLOCK = 7;
+	public static final int METADATA_JOIN_WITH_QUARTER_BLOCK = 8;
+	public static final int METADATA_JOIN_WITH_FIFTH_BLOCK = 9;
+	public static final int METADATA_JOIN_WITH_SIXTH_BLOCK = 10;
+	public static final int METADATA_JOIN_WITH_TENTH_BLOCK = 11;
+	public static final int METADATA_JOIN_WITH_TWELTH_BLOCK = 12;
+	public static final int METADATA_JOIN_WITH_FIFTEENTH_BLOCK = 13;
+	public static final int METADATA_JOIN_WITH_TWENTIETH_BLOCK = 14;
+	public static final int METADATA_JOIN_WITH_THIRTIETH_BLOCK = 15;
+	
+	public static final BiMap<Integer, Integer> MAP_METADATA_HEIGHT_TO_JOIN_CODE = HashBiMap.create();
+	static {
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(60, METADATA_JOIN_WITH_WHOLE_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(30, METADATA_JOIN_WITH_HALF_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(20, METADATA_JOIN_WITH_THIRD_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(15, METADATA_JOIN_WITH_QUARTER_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(12, METADATA_JOIN_WITH_FIFTH_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(10, METADATA_JOIN_WITH_SIXTH_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(6, METADATA_JOIN_WITH_TENTH_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(5, METADATA_JOIN_WITH_TWELTH_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(4, METADATA_JOIN_WITH_FIFTEENTH_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(3, METADATA_JOIN_WITH_TWENTIETH_BLOCK);
+		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(2, METADATA_JOIN_WITH_THIRTIETH_BLOCK);
+	}
 	
 	public FractionBlock(String name, int height) {
 		this(name, height, null);
 	}
-	
-	public int getHeight() {
-		return height;
-	}
 
-	public int getHeightInBlocks() {
-		return heightInWholeBlocks;
-	}
-
-	public boolean isExtraHalfBlock() {
-		return extraHalfBlock;
-	}
-
-
-
-	public FractionBlock(String name, int height, SlabManager slabManager) {
+	public FractionBlock(String name, int numerator, SlabManager slabManager) {
 		super(Material.rock);
 		this.name = name;
-		this.height = height;
-		this.heightInWholeBlocks = height / 2;
-		this.extraHalfBlock = (height % 2) == 1;
+		this.numerator = numerator;
+		this.heightInWholeBlocks = numerator / 2;
+		this.extraHalfBlock = (numerator % 2) == 1;
 		if(extraHalfBlock && slabManager != null) {
 			//Register this block with the slab manager
 			this.slabManager = slabManager;
@@ -116,24 +138,36 @@ public class FractionBlock extends Block {
 	@Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		//Assume that canPlaceBlockAt has already been called; so no validation left to do.
+		int returnValue = metadata;
 		
-		Block targetBlock = world.getBlock(x, y, z);
-		if(targetBlock instanceof FractionSlab) {
-			
+		boolean extraHalfBlockAlreadyUsed;
+		if(y > 0) { //Don't check for a slab underneath bedrock.
+			Block blockUnderneath = world.getBlock(x, y - 1, z);
+			if(blockUnderneath instanceof FractionSlab) {
+				FractionSlab fractionSlab = (FractionSlab)blockUnderneath;
+				int joinBlockMetadata = FractionBlock.MAP_METADATA_HEIGHT_TO_JOIN_CODE.get(fractionSlab.getNumerator());
+				world.setBlock(x, y - 1, z, this, joinBlockMetadata, 3);
+				returnValue = METADATA_NORMAL_BLOCK;
+				extraHalfBlockAlreadyUsed = true;
+			} else {
+				extraHalfBlockAlreadyUsed = false;
+			}
+		} else {
+			extraHalfBlockAlreadyUsed = false;
 		}
 		
 		for(int i = 1; i < heightInWholeBlocks - 1; i++) {    			
 			world.setBlock(x, y + i, z, this, METADATA_NORMAL_BLOCK, 3);
 		}
 		
-		if(extraHalfBlock) {
+		if(extraHalfBlock && !extraHalfBlockAlreadyUsed) {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
 			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getSlab(), METADATA_HIGHEST_BLOCK, 3);
 		} else {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
 		}
     	
-        return metadata;
+        return returnValue;
     }
     
     

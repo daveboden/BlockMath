@@ -47,7 +47,7 @@ public class BlockMathMod
     	twelthBlock = createBlockAndRegister("TwelthBlock", 5);
     	
     	SlabManager quarterSlabManager = new SlabManager();
-    	quarterTopSlab = new FractionSlab("QuarterSlab", quarterSlabManager);
+    	quarterTopSlab = new FractionSlab("QuarterSlab", 15, quarterSlabManager);
     	GameRegistry.registerBlock(quarterTopSlab, "QuarterSlab");
     	
     	quarterBlock = createBlockAndRegister("QuarterBlock", 15, quarterSlabManager);

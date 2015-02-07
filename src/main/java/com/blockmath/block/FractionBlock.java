@@ -45,6 +45,7 @@ public class FractionBlock extends Block {
 	
 	private IIcon icon0;
 	private IIcon icon;
+	private IIcon icon8;
 	
 	public static final int METADATA_LOWEST_BLOCK = 0;
 	public static final int METADATA_HIGHEST_BLOCK = 1;
@@ -53,6 +54,7 @@ public class FractionBlock extends Block {
 	public static final int METADATA_MIDDLE_BLOCK = 3;
 	public static final int METADATA_MIDDLE_UPPER_BLOCK = 4;
 	
+	public static final int START_OF_METADATA_JOIN_RANGE = 5;
 	public static final int METADATA_JOIN_WITH_WHOLE_BLOCK = 5;
 	public static final int METADATA_JOIN_WITH_HALF_BLOCK = 6;
 	public static final int METADATA_JOIN_WITH_THIRD_BLOCK = 7;
@@ -80,8 +82,8 @@ public class FractionBlock extends Block {
 		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(2, METADATA_JOIN_WITH_THIRTIETH_BLOCK);
 	}
 	
-	public FractionBlock(String name, int height) {
-		this(name, height, null);
+	public FractionBlock(String name, int numerator) {
+		this(name, numerator, null);
 	}
 
 	public FractionBlock(String name, int numerator, SlabManager slabManager) {
@@ -162,7 +164,7 @@ public class FractionBlock extends Block {
 		
 		if(extraHalfBlock && !extraHalfBlockAlreadyUsed) {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
-			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getSlab(), METADATA_HIGHEST_BLOCK, 3);
+			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getTopSlab(), METADATA_HIGHEST_BLOCK, 3);
 		} else {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
 		}
@@ -173,6 +175,7 @@ public class FractionBlock extends Block {
     
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
+    	icon8 = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name + 8);
     	icon0 = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name + 0);
     	icon = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name);
     }
@@ -181,10 +184,14 @@ public class FractionBlock extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int metadata) {
-    	if(metadata == METADATA_LOWEST_BLOCK) {
-    		return icon0;
+    	switch(metadata) {
+	    	case METADATA_LOWEST_BLOCK:
+	    		return icon0;
+	    	case METADATA_JOIN_WITH_QUARTER_BLOCK:
+	    		return icon8;
+	    	default:
+	    		return icon;
     	}
-    	return icon;
     }
 
     //TODO - explosions
@@ -197,8 +204,12 @@ public class FractionBlock extends Block {
     @Override
     public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata) {
     	//Travel downwards if we're not already at the bottom
-    	if(metadata != METADATA_LOWEST_BLOCK) {
+    	if(metadata != METADATA_LOWEST_BLOCK && metadata < START_OF_METADATA_JOIN_RANGE) {
     		destroyMiddleBlocksBelow(world, x, y, z);
+    	}
+    	
+    	if(metadata >= START_OF_METADATA_JOIN_RANGE) {
+    		world.setBlock(x, y, z, Registry.getSlabForJoinMetadata(metadata), METADATA_HIGHEST_BLOCK, 3);
     	}
     	
     	//Travel upwards if we're not already at the top

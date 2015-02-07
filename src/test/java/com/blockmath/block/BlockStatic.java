@@ -15,17 +15,13 @@ public class BlockStatic {
 	
 	public static final BlockAir air = new AirBlock();
 	public static final BlockStone stone = new BlockStone();
-	public static final WholeFractionBlock oneBlock = new WholeFractionBlock();
-	private static final SlabManager quarterSlabManager = new SlabManager();
-	public static final QuarterFractionBlock quarterBlock = new QuarterFractionBlock(quarterSlabManager);
-	public static final FractionSlab quarterSlab = new FractionSlab("QuarterSlab", 15, quarterSlabManager);
 	
 	public static BiMap<String, Block> blocksByName = HashBiMap.create();
 	static {
 		blocksByName.put("air", air);
 		blocksByName.put("stone", stone);
-		blocksByName.put("whole_fraction", oneBlock);
-		blocksByName.put("quarter_fraction", quarterBlock);
-		blocksByName.put("quarter_fraction_slab", quarterSlab);
+		blocksByName.put("whole_fraction", Registry.FRACTION_BLOCK_WHOLE);
+		blocksByName.put("quarter_fraction", Registry.FRACTION_BLOCK_QUARTER);
+		blocksByName.put("quarter_fraction_slab", Registry.FRACTION_SLAB_QUARTER);
 	}
 }

@@ -5,15 +5,15 @@ import net.minecraft.block.BlockSlab;
 
 public class SlabManager {
 
-	private FractionSlab slab;
+	private FractionSlab topSlab;
 	private FractionBlock block;
 	
-	public FractionSlab getSlab() {
-		return slab;
+	public FractionSlab getTopSlab() {
+		return topSlab;
 	}
 	
-	public void setSlab(FractionSlab slab) {
-		this.slab = slab;
+	public void setTopSlab(FractionSlab topSlab) {
+		this.topSlab = topSlab;
 	}
 
 	public FractionBlock getBlock() {

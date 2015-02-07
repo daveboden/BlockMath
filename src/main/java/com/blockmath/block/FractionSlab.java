@@ -30,7 +30,7 @@ public class FractionSlab extends BlockSlab {
 		this.name = name;
 		this.numerator = numerator;
 		this.slabManager = slabManager;
-		slabManager.setSlab(this);
+		slabManager.setTopSlab(this);
 		setBlockName(BlockMathMod.MODID + "_" + name);
 	}
 	

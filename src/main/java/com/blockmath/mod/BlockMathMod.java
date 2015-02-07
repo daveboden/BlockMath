@@ -5,6 +5,7 @@ import net.minecraft.block.BlockSlab;
 
 import com.blockmath.block.FractionBlock;
 import com.blockmath.block.FractionSlab;
+import com.blockmath.block.Registry;
 import com.blockmath.block.SlabManager;
 
 import cpw.mods.fml.common.Mod;
@@ -26,42 +27,10 @@ public class BlockMathMod
     public static final String MODID = "blockmath";
     public static final String VERSION = "1.0";
     
-    private Block oneBlock;
-    private Block halfBlock;
-    private Block thirdBlock;
-    private Block quarterBlock;
-    private Block fifthBlock;
-    private Block sixthBlock;
-    private Block tenthBlock;
-    private Block twelthBlock;
-    
-    private BlockSlab quarterTopSlab;
-    
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-    	oneBlock = createBlockAndRegister("OneBlock", 60); //Decoration on block offset 14 and 15
-    	halfBlock = createBlockAndRegister("HalfBlock", 30); //Decoration on block offset 7
-    	thirdBlock = createBlockAndRegister("ThirdBlock", 20); //Decoration on block offset 4 and 5
-    	fifthBlock = createBlockAndRegister("FifthBlock", 12); //
-    	sixthBlock = createBlockAndRegister("SixthBlock", 10);
-    	twelthBlock = createBlockAndRegister("TwelthBlock", 5);
-    	
-    	SlabManager quarterSlabManager = new SlabManager();
-    	quarterTopSlab = new FractionSlab("QuarterSlab", 15, quarterSlabManager);
-    	GameRegistry.registerBlock(quarterTopSlab, "QuarterSlab");
-    	
-    	quarterBlock = createBlockAndRegister("QuarterBlock", 15, quarterSlabManager);
+    	Registry.register();
 	}
-    
-    private Block createBlockAndRegister(String name, int height) {
-    	return createBlockAndRegister(name, height, null);
-    }
-    
-    private Block createBlockAndRegister(String name, int height, SlabManager slabManager) {
-    	Block block = new FractionBlock(name, height, slabManager);
-    	GameRegistry.registerBlock(block, name);
-    	return block;
-    }
     
     @EventHandler
     public void init(FMLInitializationEvent event)

@@ -22,16 +22,22 @@ public class StubWorld {
 		@Override
 		public int compareTo(BlockKey o) {
 			int compareResult;
-			compareResult = Integer.compare(x, o.x);
+			
+			compareResult = integerCompare(x, o.x);
 			if(compareResult != 0) {
 				return compareResult;
 			}
-			compareResult = Integer.compare(y, o.y);
+			compareResult = integerCompare(y, o.y);
 			if(compareResult != 0) {
 				return compareResult;
 			}
-			return Integer.compare(z, o.z);
+			return integerCompare(z, o.z);
 		}
+	}
+	
+	//Java 1.7 replace with Integer.compare(x, o.x)
+	private int integerCompare(int a, int b) {
+		return Integer.valueOf(a).compareTo(Integer.valueOf(b));
 	}
 	
 	public Block getBlock(int x, int y, int z) {
@@ -69,7 +75,7 @@ public class StubWorld {
     	BlockKey blockKey = new BlockKey(x, y, z);
     	BlockData blockData = blocks.get(blockKey);
     	BlockData blockDataNew = new BlockData(blockData.getBlock(), metadata);
-    	blocks.replace(blockKey, blockData, blockDataNew);
+    	blocks.put(blockKey, blockDataNew);
     	return true;
     }
     

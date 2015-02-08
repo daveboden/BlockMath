@@ -14,3 +14,5 @@
 /.settings/
 /.classpath
 /.project
+/build/
+.metadata

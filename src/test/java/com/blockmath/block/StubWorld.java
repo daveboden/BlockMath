@@ -85,7 +85,7 @@ public class StubWorld {
     		BlockKey key = entry.getKey();
     		BlockData data = entry.getValue();
     		sb.append("(").append(key.x).append(",").append(key.y).append(",").append(key.z).append(":")
-    		  .append(data.getBlock().getClass().getSimpleName()).append(":").append(data.getMetadata()).append(")");
+    		  .append(data.getBlock().toString()).append(":").append(data.getMetadata()).append(")");
     	}
     	sb.append("]");
     	return sb.toString();

@@ -43,14 +43,14 @@ public class Registry {
 	public static final SlabManager SLAB_MANAGER_TENTH = new SlabManager();
 	public static final String FRACTION_SLAB_TENTH_NAME = "TenthSlab";
 	public static final String FRACTION_BLOCK_TENTH_NAME = "TenthBlock";	
-	public static final FractionSlab FRACTION_SLAB_TENTH = new FractionSlab(FRACTION_SLAB_TENTH_NAME, 10, SLAB_MANAGER_TENTH);
-	public static final FractionBlock FRACTION_BLOCK_TENTH = new FractionBlock(FRACTION_BLOCK_TENTH_NAME, 10, SLAB_MANAGER_TENTH);
+	public static final FractionSlab FRACTION_SLAB_TENTH = new FractionSlab(FRACTION_SLAB_TENTH_NAME, 6, SLAB_MANAGER_TENTH);
+	public static final FractionBlock FRACTION_BLOCK_TENTH = new FractionBlock(FRACTION_BLOCK_TENTH_NAME, 6, SLAB_MANAGER_TENTH);
 	
 	public static final SlabManager SLAB_MANAGER_TWELTH = new SlabManager();
 	public static final String FRACTION_SLAB_TWELTH_NAME = "TwelthSlab";
 	public static final String FRACTION_BLOCK_TWELTH_NAME = "TwelthBlock";	
-	public static final FractionSlab FRACTION_SLAB_TWELTH = new FractionSlab(FRACTION_SLAB_TWELTH_NAME, 10, SLAB_MANAGER_TWELTH);
-	public static final FractionBlock FRACTION_BLOCK_TWELTH = new FractionBlock(FRACTION_BLOCK_TWELTH_NAME, 10, SLAB_MANAGER_TWELTH);
+	public static final FractionSlab FRACTION_SLAB_TWELTH = new FractionSlab(FRACTION_SLAB_TWELTH_NAME, 5, SLAB_MANAGER_TWELTH);
+	public static final FractionBlock FRACTION_BLOCK_TWELTH = new FractionBlock(FRACTION_BLOCK_TWELTH_NAME, 5, SLAB_MANAGER_TWELTH);
 	
 
 	public static FractionSlab getSlabForJoinMetadata(int metadata) {

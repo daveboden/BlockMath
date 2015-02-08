@@ -58,6 +58,9 @@ public abstract class ConcordionBlockTestBase {
 	}
 	public BlockDataSimple getBlock(int x, int y, int z) {
 		BlockData data = stubWorld.getBlockAndMetadata(x, y, z);
+		if(data == null) {
+			throw new IllegalArgumentException(String.format("Null block: %d, %d, %d", x, y, z));
+		}
 		return new BlockDataSimple(BlockStatic.blocksByName.inverse().get(data.getBlock()), data.getMetadata());
 	}
 	

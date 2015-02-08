@@ -1,0 +1,70 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+    <head>
+        <link href="../concordion.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <h1>Stack a tenth block on top of a quarter block</h1>
+        <p>
+        Start with air blocks:
+        
+        <table concordion:execute="setBlock(#x, #y, #z, #type)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:set="#type">Type</th>
+            </tr>            
+            <tr><td>6</td><td>41</td><td>7</td><td>stone</td></tr>
+            <tr><td>6</td><td>40</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>39</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>38</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>37</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>36</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>35</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>34</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>33</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>32</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>31</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>30</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>29</td><td>7</td><td>stone</td></tr>
+        </table>
+        </p>
+        
+        <p><span concordion:execute="setBlock(#xyz, #type)">Create a <span concordion:set="#type">quarter_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 30, 7)</span>
+        </span>
+        and then <span concordion:execute="setBlock(#xyz, #type)">add a <span concordion:set="#type">tenth_fraction</span> superblock on top at 
+        <span concordion:set="#xyz">(6, 38, 7)</span>
+        </span>
+        
+        then we will end up with this configuration, where the centre block is a join between two blocks and there's a slab on the top:
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>            
+            <tr><td>6</td><td>41</td><td>7</td><td>stone</td><td>0</td></tr>            
+            <tr><td>6</td><td>40</td><td>7</td><td>tenth_fraction_slab</td><td>1</td></tr>            
+            <tr><td>6</td><td>39</td><td>7</td><td>tenth_fraction</td><td>2</td></tr>            
+            <tr><td>6</td><td>38</td><td>7</td><td>tenth_fraction</td><td>2</td></tr>            
+            <tr><td>6</td><td>37</td><td>7</td><td>tenth_fraction</td><td>8</td></tr>
+            <tr><td>6</td><td>36</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>35</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>34</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>33</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>32</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>31</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>30</td><td>7</td><td>quarter_fraction</td><td>0</td></tr>
+            <tr><td>6</td><td>29</td><td>7</td><td>stone</td><td>0</td></tr>
+        </table>
+        </p>
+        
+    </body>
+    
+</html>

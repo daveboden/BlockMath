@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import com.blockmath.mod.BlockMathMod;
@@ -92,13 +93,9 @@ public class FractionBlock extends Block {
 		this.numerator = numerator;
 		this.heightInWholeBlocks = numerator / 2;
 		this.extraHalfBlock = (numerator % 2) == 1;
-		if(extraHalfBlock && slabManager != null) {
-			//Register this block with the slab manager
-			this.slabManager = slabManager;
-			slabManager.setBlock(this);
-		} else {
-			this.slabManager = null;
-		}
+		//Register this block with the slab manager
+		this.slabManager = slabManager;
+		slabManager.setBlock(this);
 		setBlockName(BlockMathMod.MODID + "_" + name);
 		setCreativeTab(CreativeTabs.tabDecorations);
 	}
@@ -142,7 +139,7 @@ public class FractionBlock extends Block {
 		//Assume that canPlaceBlockAt has already been called; so no validation left to do.
 		int returnValue = metadata;
 		
-		boolean extraHalfBlockAlreadyUsed;
+		boolean slabPlacedAtBottom;
 		if(y > 0) { //Don't check for a slab underneath bedrock.
 			Block blockUnderneath = world.getBlock(x, y - 1, z);
 			if(blockUnderneath instanceof FractionSlab) {
@@ -150,21 +147,29 @@ public class FractionBlock extends Block {
 				int joinBlockMetadata = FractionBlock.MAP_METADATA_HEIGHT_TO_JOIN_CODE.get(fractionSlab.getNumerator());
 				world.setBlock(x, y - 1, z, this, joinBlockMetadata, 3);
 				returnValue = METADATA_NORMAL_BLOCK;
-				extraHalfBlockAlreadyUsed = true;
+				slabPlacedAtBottom = true;
 			} else {
-				extraHalfBlockAlreadyUsed = false;
+				slabPlacedAtBottom = false;
 			}
 		} else {
-			extraHalfBlockAlreadyUsed = false;
+			slabPlacedAtBottom = false;
 		}
 		
 		for(int i = 1; i < heightInWholeBlocks - 1; i++) {    			
 			world.setBlock(x, y + i, z, this, METADATA_NORMAL_BLOCK, 3);
 		}
 		
-		if(extraHalfBlock && !extraHalfBlockAlreadyUsed) {
+		if(extraHalfBlock && !slabPlacedAtBottom) {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_NORMAL_BLOCK, 3);
 			world.setBlock(x, y + heightInWholeBlocks, z, slabManager.getTopSlab(), METADATA_HIGHEST_BLOCK, 3);
+		} else if(!extraHalfBlock && slabPlacedAtBottom) {
+			//This superblock is an even number of blocks but, because of an odd numbered superblock lower in the
+			//stack that has a slab on top, we've added a slab at the bottom of this superblock and need to add
+			//a slab at the top instead of a full block.
+			//For example, when a quarter block (7.5 minecraft blocks) is placed then a tenth block (3 minecraft blocks)
+			//is placed on top, the tenth block will convert the slab at the bottom to a joining block and add 2 normal
+			//full blocks (2.5 in total so far) and will need a slab at the top to account for the remaining .5 blocks.
+			world.setBlock(x, y + heightInWholeBlocks - 1, z, slabManager.getTopSlab(), METADATA_HIGHEST_BLOCK, 3);
 		} else {
 			world.setBlock(x, y + heightInWholeBlocks - 1, z, this, METADATA_HIGHEST_BLOCK, 3);
 		}
@@ -195,7 +200,7 @@ public class FractionBlock extends Block {
     }
 
     //TODO - explosions
-    
+
     /**
      * Travel downwards and upwards, destroying blocks as you go until you reach:
      * * The block with metadata telling you it's the lowest or uppermost block.
@@ -213,7 +218,6 @@ public class FractionBlock extends Block {
     	}
     	
     	//Travel upwards if we're not already at the top
-    	//TODO or at a top slab
     	if(metadata != METADATA_HIGHEST_BLOCK) {
     		for(int currentY = y + 1; currentY <= world.getHeight(); currentY++) {
     			Block block = world.getBlock(x, currentY, z);
@@ -235,14 +239,24 @@ public class FractionBlock extends Block {
     }
     
     public void destroyMiddleBlocksBelow(final World world, final int x, final int y, final int z) {
-		for(int currentY = y - 1; currentY >= 0 && y - currentY < heightInWholeBlocks + 1; currentY--) { 
-    		boolean stopHere = world.getBlockMetadata(x, currentY, z) == METADATA_LOWEST_BLOCK;
+		for(int currentY = y - 1; currentY >= 0 && y - currentY < heightInWholeBlocks + 1; currentY--) {
+			int currentMetadata = world.getBlockMetadata(x, currentY, z);
+    		boolean stopHere = (currentMetadata == METADATA_LOWEST_BLOCK || currentMetadata >= START_OF_METADATA_JOIN_RANGE);
     		
-    		world.setBlockToAir(x, currentY, z);
+        	if(currentMetadata >= START_OF_METADATA_JOIN_RANGE) {
+        		world.setBlock(x, currentY, z, Registry.getSlabForJoinMetadata(currentMetadata), METADATA_HIGHEST_BLOCK, 3);
+        	} else {
+        		world.setBlockToAir(x, currentY, z);
+        	}
     		
     		if(stopHere) {
     			break;
     		}
     	}
+    }
+    
+    @Override
+    public String toString() {
+    	return "FractionBlock(" + numerator + ")";
     }
 }

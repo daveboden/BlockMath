@@ -11,6 +11,10 @@ public class BlockStatic {
 
 	private static class AirBlock extends BlockAir {
 		//Work around protected constructor
+		@Override
+		public String toString() {
+			return "air";
+		}
 	}
 	
 	public static final BlockAir air = new AirBlock();
@@ -23,5 +27,8 @@ public class BlockStatic {
 		blocksByName.put("whole_fraction", Registry.FRACTION_BLOCK_WHOLE);
 		blocksByName.put("quarter_fraction", Registry.FRACTION_BLOCK_QUARTER);
 		blocksByName.put("quarter_fraction_slab", Registry.FRACTION_SLAB_QUARTER);
+		blocksByName.put("tenth_fraction", Registry.FRACTION_BLOCK_TENTH);
+		blocksByName.put("tenth_fraction_slab", Registry.FRACTION_SLAB_TENTH);
+		
 	}
 }

@@ -76,7 +76,7 @@
         <p>Then if we
         <span concordion:execute="destroyBlock(#xyz)">destroy the joining block at <span concordion:set="#xyz">(6, 37, 7)</span>
         </span>
-        , the top superblock will be back to air but the lower one will remain:
+        , the top superblock will be back to air but the lower one will remain and there will be a slab on top of it:
         
         <table concordion:execute="#result = getBlock(#x, #y, #z)">
             <tr>
@@ -106,18 +106,16 @@
         </table>
         </p>
         
-        <!--
-        <h1>Destroy bottom block and ensure everything including slab gets destroyed</h1>
-        
         <p>
-        <span concordion:execute="setBlock(#xyz, #type)">
-            Recreate the <span concordion:set="#type">quarter_fraction</span> superblock at 
-            <span concordion:set="#xyz">(6, 30, 7)</span>
+        <span concordion:execute="setBlock(#xyz, #type)">Recreate the <span concordion:set="#type">quarter_fraction</span> superblock on top at 
+        <span concordion:set="#xyz">(6, 38, 7)</span>.
         </span>
-        and then
-        <span concordion:execute="destroyBlock(#xyz)">destroy the lowest block at <span concordion:set="#xyz">(6, 30, 7)</span></span>.
         
-        The whole superblock should be back to air:
+        Now 
+        <span concordion:execute="destroyBlock(#xyz)">destroy the top superblock by mining at <span concordion:set="#xyz">(6, 40, 7)</span>
+        </span>
+        
+        We should again be back to just having the single quarter superblock at the bottom:
         
         <table concordion:execute="#result = getBlock(#x, #y, #z)">
             <tr>
@@ -127,19 +125,25 @@
                 <th concordion:assertEquals="#result.type">Type</th>
                 <th concordion:assertEquals="#result.metadata">Metadata value</th>
             </tr>            
-            <tr><td>6</td><td>38</td><td>7</td><td>stone</td><td>0</td></tr>
-            <tr><td>6</td><td>37</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>36</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>35</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>34</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>33</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>32</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>31</td><td>7</td><td>air</td><td>0</td></tr>
-            <tr><td>6</td><td>30</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>45</td><td>7</td><td>stone</td><td>0</td></tr>
+            <tr><td>6</td><td>44</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>43</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>42</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>41</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>40</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>39</td><td>7</td><td>air</td><td>0</td></tr>
+            <tr><td>6</td><td>38</td><td>7</td><td>air</td><td>0</td></tr>         
+            <tr><td>6</td><td>37</td><td>7</td><td>quarter_fraction_slab</td><td>1</td></tr>
+            <tr><td>6</td><td>36</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>35</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>34</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>33</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>32</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>31</td><td>7</td><td>quarter_fraction</td><td>2</td></tr>
+            <tr><td>6</td><td>30</td><td>7</td><td>quarter_fraction</td><td>0</td></tr>
             <tr><td>6</td><td>29</td><td>7</td><td>stone</td><td>0</td></tr>
         </table>
         </p>
-        -->
         
     </body>
     

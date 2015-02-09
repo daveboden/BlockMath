@@ -17,3 +17,6 @@
 /build/
 .metadata
 /config/
+/options.txt
+/saves/
+/usernamecache.json

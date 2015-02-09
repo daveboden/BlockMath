@@ -1,6 +1,5 @@
 package com.blockmath.block;
 
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
@@ -11,8 +10,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import scala.tools.nsc.doc.base.comment.Link;
 
 public class StubWorldFactory {
 

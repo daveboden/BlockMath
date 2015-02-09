@@ -1,27 +1,20 @@
 package com.blockmath.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
+import lombok.Getter;
+import lombok.Setter;
 
 public class SlabManager {
 
+	@Getter
+	@Setter
 	private FractionSlab topSlab;
+	
+	@Getter
+	@Setter
 	private FractionBlock block;
 	
-	public FractionSlab getTopSlab() {
-		return topSlab;
-	}
-	
-	public void setTopSlab(FractionSlab topSlab) {
-		this.topSlab = topSlab;
-	}
-
-	public FractionBlock getBlock() {
-		return block;
-	}
-
-	public void setBlock(FractionBlock block) {
-		this.block = block;
-	}
+	@Getter
+	@Setter
+	private FractionJoinBlock joinBlock;
 	
 }

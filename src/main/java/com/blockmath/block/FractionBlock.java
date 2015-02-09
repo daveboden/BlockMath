@@ -2,20 +2,14 @@ package com.blockmath.block;
 
 import lombok.Getter;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import com.blockmath.mod.BlockMathMod;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -42,46 +36,18 @@ public class FractionBlock extends Block {
 	private final int heightInWholeBlocks; //height / 2 with no remainder
 	@Getter
 	private final boolean extraHalfBlock;
-	private final SlabManager slabManager; //null if extraHalfBlock is false
+	private final SlabManager slabManager;
 	
 	private IIcon icon0;
 	private IIcon icon;
-	private IIcon icon8;
 	
-	public static final int METADATA_LOWEST_BLOCK = 0;
+	public static final int METADATA_ZERO_FOR_CREATIVE_TAB_ICON = 0;
+	public static final int METADATA_LOWEST_BLOCK = 3;
 	public static final int METADATA_HIGHEST_BLOCK = 1;
 	public static final int METADATA_NORMAL_BLOCK = 2;
 	//Tag the middle blocks in a superblock for decorative purposes
-	public static final int METADATA_MIDDLE_BLOCK = 3;
-	public static final int METADATA_MIDDLE_UPPER_BLOCK = 4;
-	
-	public static final int START_OF_METADATA_JOIN_RANGE = 5;
-	public static final int METADATA_JOIN_WITH_WHOLE_BLOCK = 5;
-	public static final int METADATA_JOIN_WITH_HALF_BLOCK = 6;
-	public static final int METADATA_JOIN_WITH_THIRD_BLOCK = 7;
-	public static final int METADATA_JOIN_WITH_QUARTER_BLOCK = 8;
-	public static final int METADATA_JOIN_WITH_FIFTH_BLOCK = 9;
-	public static final int METADATA_JOIN_WITH_SIXTH_BLOCK = 10;
-	public static final int METADATA_JOIN_WITH_TENTH_BLOCK = 11;
-	public static final int METADATA_JOIN_WITH_TWELTH_BLOCK = 12;
-	public static final int METADATA_JOIN_WITH_FIFTEENTH_BLOCK = 13;
-	public static final int METADATA_JOIN_WITH_TWENTIETH_BLOCK = 14;
-	public static final int METADATA_JOIN_WITH_THIRTIETH_BLOCK = 15;
-	
-	public static final BiMap<Integer, Integer> MAP_METADATA_HEIGHT_TO_JOIN_CODE = HashBiMap.create();
-	static {
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(60, METADATA_JOIN_WITH_WHOLE_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(30, METADATA_JOIN_WITH_HALF_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(20, METADATA_JOIN_WITH_THIRD_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(15, METADATA_JOIN_WITH_QUARTER_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(12, METADATA_JOIN_WITH_FIFTH_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(10, METADATA_JOIN_WITH_SIXTH_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(6, METADATA_JOIN_WITH_TENTH_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(5, METADATA_JOIN_WITH_TWELTH_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(4, METADATA_JOIN_WITH_FIFTEENTH_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(3, METADATA_JOIN_WITH_TWENTIETH_BLOCK);
-		MAP_METADATA_HEIGHT_TO_JOIN_CODE.put(2, METADATA_JOIN_WITH_THIRTIETH_BLOCK);
-	}
+	public static final int METADATA_MIDDLE_BLOCK = 7;
+	public static final int METADATA_MIDDLE_UPPER_BLOCK = 8;
 	
 	public FractionBlock(String name, int numerator) {
 		this(name, numerator, null);
@@ -137,21 +103,23 @@ public class FractionBlock extends Block {
 	@Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		//Assume that canPlaceBlockAt has already been called; so no validation left to do.
-		int returnValue = metadata;
+		int returnValue;
 		
 		boolean slabPlacedAtBottom;
 		if(y > 0) { //Don't check for a slab underneath bedrock.
 			Block blockUnderneath = world.getBlock(x, y - 1, z);
 			if(blockUnderneath instanceof FractionSlab) {
 				FractionSlab fractionSlab = (FractionSlab)blockUnderneath;
-				int joinBlockMetadata = FractionBlock.MAP_METADATA_HEIGHT_TO_JOIN_CODE.get(fractionSlab.getNumerator());
-				world.setBlock(x, y - 1, z, this, joinBlockMetadata, 3);
+				int joinBlockMetadata = FractionJoinBlock.MAP_METADATA_HEIGHT_TO_JOIN_CODE.get(fractionSlab.getNumerator());
+				world.setBlock(x, y - 1, z, slabManager.getJoinBlock(), joinBlockMetadata, 3);
 				returnValue = METADATA_NORMAL_BLOCK;
 				slabPlacedAtBottom = true;
 			} else {
+				returnValue = METADATA_LOWEST_BLOCK;
 				slabPlacedAtBottom = false;
 			}
 		} else {
+			returnValue = METADATA_LOWEST_BLOCK;
 			slabPlacedAtBottom = false;
 		}
 		
@@ -180,7 +148,6 @@ public class FractionBlock extends Block {
     
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-    	icon8 = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name + 8);
     	icon0 = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name + 0);
     	icon = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name);
     }
@@ -190,10 +157,8 @@ public class FractionBlock extends Block {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int metadata) {
     	switch(metadata) {
-	    	case METADATA_LOWEST_BLOCK:
+	    	case METADATA_ZERO_FOR_CREATIVE_TAB_ICON:
 	    		return icon0;
-	    	case METADATA_JOIN_WITH_QUARTER_BLOCK:
-	    		return icon8;
 	    	default:
 	    		return icon;
     	}
@@ -201,19 +166,23 @@ public class FractionBlock extends Block {
 
     //TODO - explosions
 
+    @Override
+    public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata) {
+    	onBlockDestroyedByPlayer(world, x, y, z, metadata, FractionBlockType.BLOCK);
+    }
+    
     /**
      * Travel downwards and upwards, destroying blocks as you go until you reach:
      * * The block with metadata telling you it's the lowest or uppermost block.
      * * The world vertical limits (0, world.getHeight()) - in case we have some sort bug. Log a warning.
      */
-    @Override
-    public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata) {
+    public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int metadata, FractionBlockType fractionBlockType) {
     	//Travel downwards if we're not already at the bottom
-    	if(metadata != METADATA_LOWEST_BLOCK && metadata < START_OF_METADATA_JOIN_RANGE) {
-    		destroyMiddleBlocksBelow(world, x, y, z);
+    	if(fractionBlockType != FractionBlockType.JOIN && metadata != METADATA_LOWEST_BLOCK) {
+	    	destroyMiddleBlocksBelow(world, x, y, z);
     	}
     	
-    	if(metadata >= START_OF_METADATA_JOIN_RANGE) {
+    	if(fractionBlockType == FractionBlockType.JOIN) {
     		world.setBlock(x, y, z, Registry.getSlabForJoinMetadata(metadata), METADATA_HIGHEST_BLOCK, 3);
     	}
     	
@@ -241,17 +210,20 @@ public class FractionBlock extends Block {
     public void destroyMiddleBlocksBelow(final World world, final int x, final int y, final int z) {
 		for(int currentY = y - 1; currentY >= 0 && y - currentY < heightInWholeBlocks + 1; currentY--) {
 			int currentMetadata = world.getBlockMetadata(x, currentY, z);
-    		boolean stopHere = (currentMetadata == METADATA_LOWEST_BLOCK || currentMetadata >= START_OF_METADATA_JOIN_RANGE);
-    		
-        	if(currentMetadata >= START_OF_METADATA_JOIN_RANGE) {
-        		world.setBlock(x, currentY, z, Registry.getSlabForJoinMetadata(currentMetadata), METADATA_HIGHEST_BLOCK, 3);
-        	} else {
-        		world.setBlockToAir(x, currentY, z);
-        	}
-    		
-    		if(stopHere) {
-    			break;
-    		}
+			Block currentBlock = world.getBlock(x, currentY, z);
+			
+			if(currentBlock instanceof FractionBlock) {
+				world.setBlockToAir(x, currentY, z);
+				if(currentMetadata == METADATA_LOWEST_BLOCK) {
+					break;
+				}
+			} else if(currentBlock instanceof FractionJoinBlock) {
+				world.setBlock(x, currentY, z, Registry.getSlabForJoinMetadata(currentMetadata), METADATA_HIGHEST_BLOCK, 3);
+				break;
+			} else {
+				//TODO Log error; unknown block
+				break;
+			}
     	}
     }
     

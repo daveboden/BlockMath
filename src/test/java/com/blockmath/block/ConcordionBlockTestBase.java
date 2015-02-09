@@ -8,9 +8,6 @@ import net.minecraft.world.World;
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 @RunWith(ConcordionRunner.class)
 public abstract class ConcordionBlockTestBase {
@@ -54,14 +51,32 @@ public abstract class ConcordionBlockTestBase {
 	@Data
 	class BlockDataSimple {
 		private final String type;
-		private final int metadata;
+		private final String metadata;
 	}
 	public BlockDataSimple getBlock(int x, int y, int z) {
 		BlockData data = stubWorld.getBlockAndMetadata(x, y, z);
 		if(data == null) {
 			throw new IllegalArgumentException(String.format("Null block: %d, %d, %d", x, y, z));
 		}
-		return new BlockDataSimple(BlockStatic.blocksByName.inverse().get(data.getBlock()), data.getMetadata());
+		String metadataString;
+		if(data.getBlock() instanceof FractionBlock || data.getBlock() instanceof FractionSlab) {
+			switch(data.getMetadata()) {
+				case FractionBlock.METADATA_LOWEST_BLOCK:
+					metadataString = "lowest";
+					break;
+				case FractionBlock.METADATA_HIGHEST_BLOCK:
+					metadataString = "highest";
+					break;
+				case FractionBlock.METADATA_NORMAL_BLOCK:
+					metadataString = "normal";
+					break;					
+				default:
+					metadataString = Integer.toString(data.getMetadata());
+			}
+		} else {
+			metadataString = Integer.toString(data.getMetadata());
+		}
+		return new BlockDataSimple(BlockStatic.blocksByName.inverse().get(data.getBlock()), metadataString);
 	}
 	
 	public BlockDataSimple getBlock(String xyzString) {

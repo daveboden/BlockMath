@@ -27,8 +27,10 @@ public class BlockStatic {
 		blocksByName.put("whole_fraction", Registry.FRACTION_BLOCK_WHOLE);
 		blocksByName.put("quarter_fraction", Registry.FRACTION_BLOCK_QUARTER);
 		blocksByName.put("quarter_fraction_slab", Registry.FRACTION_SLAB_QUARTER);
+		blocksByName.put("quarter_fraction_join", Registry.FRACTION_JOIN_QUARTER);
 		blocksByName.put("tenth_fraction", Registry.FRACTION_BLOCK_TENTH);
 		blocksByName.put("tenth_fraction_slab", Registry.FRACTION_SLAB_TENTH);
+		blocksByName.put("tenth_fraction_join", Registry.FRACTION_JOIN_TENTH);
 		
 	}
 }

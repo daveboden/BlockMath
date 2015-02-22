@@ -6,3 +6,7 @@ tile.blockmath_FifthBlock.name=1/5 block
 tile.blockmath_SixthBlock.name=1/6 block
 tile.blockmath_TenthBlock.name=1/10 block
 tile.blockmath_TwelthBlock.name=1/12 block
+tile.blockmath_FifteenthBlock.name=1/15 block
+tile.blockmath_TwentiethBlock.name=1/20 block
+tile.blockmath_ThirtiethBlock.name=1/30 block
+tile.blockmath_SixtiethBlock.name=1/60 block

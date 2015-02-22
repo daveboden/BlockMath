@@ -49,6 +49,12 @@ public class FractionSlab extends BlockSlab {
     	return slabManager.getBlock().getIcon(side, FractionBlock.METADATA_NORMAL_BLOCK);
     }
     
+    /**
+     * No icons to register for slabs; they use the corresponding block's texture.
+     */
+    @Override
+    public void registerBlockIcons(net.minecraft.client.renderer.texture.IIconRegister iconRegister) {};
+    
     @Override
     public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metadata) {
     	slabManager.getBlock().destroyMiddleBlocksBelow(world, x, y, z);

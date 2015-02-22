@@ -1,0 +1,183 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+    <head>
+        <link href="../concordion.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <p>
+        The middle blocks of superblocks are marked with special metadata values so that they can be decorated using different textures.
+        For example, pictures of fractions can be placed as decoration. This test ensures that the middle block and, if appropriate
+        due to there being an even number of Minecraft blocks in the superblock, an "upper middle" are marked correctly.
+        </p>
+        <p>
+        <span concordion:execute="setColumnToAir(#xyz, #height)">Create a column of air at
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        with height <span concordion:set="#height">100</span></span>.
+        </p>
+        
+        <p>Now if we <span concordion:execute="setBlock(#xyz, #type)">create the <span concordion:set="#type">whole_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        </span>
+        </p>
+        
+        <p>
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>                      
+            <tr><td>6</td><td>29</td><td>7</td><td>whole_fraction</td><td>highest</td></tr>
+            <tr><td>6</td><td>28</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>27</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>26</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>25</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>24</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>23</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>22</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>21</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>20</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>19</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>18</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>17</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>16</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>15</td><td>7</td><td>whole_fraction</td><td>middle_upper</td></tr>
+            <tr><td>6</td><td>14</td><td>7</td><td>whole_fraction</td><td>middle</td></tr>
+            <tr><td>6</td><td>13</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>12</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>11</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>10</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>9</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>8</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>7</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>6</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>5</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>4</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>3</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>2</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>1</td><td>7</td><td>whole_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>0</td><td>7</td><td>whole_fraction</td><td>lowest</td></tr>
+        </table>
+        
+        </p>
+        
+        <p>
+        <span concordion:execute="setColumnToAir(#xyz, #height)">Reset the column of air at
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        with height <span concordion:set="#height">100</span></span>.
+        
+        <span concordion:execute="setBlock(#xyz, #type)">Create the <span concordion:set="#type">half_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        </span>
+        </p>
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>
+            <tr><td>6</td><td>14</td><td>7</td><td>half_fraction</td><td>highest</td></tr>
+            <tr><td>6</td><td>13</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>12</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>11</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>10</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>9</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>8</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>7</td><td>7</td><td>half_fraction</td><td>middle</td></tr>
+            <tr><td>6</td><td>6</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>5</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>4</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>3</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>2</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>1</td><td>7</td><td>half_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>0</td><td>7</td><td>half_fraction</td><td>lowest</td></tr>
+        </table>
+        
+        <p>
+        <span concordion:execute="setColumnToAir(#xyz, #height)">Reset the column of air at
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        with height <span concordion:set="#height">100</span></span>.
+        
+        <span concordion:execute="setBlock(#xyz, #type)">Create the <span concordion:set="#type">quarter_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        </span>
+        </p>
+        
+        <p>
+        The quarter superblock is 7.5 blocks high. It's debatable as to whether it should just have a "middle" on block index 3 or whether
+        it should also have a middle_upper on block index 4. I've decided to just decorate a single "middle" block.
+        </p>
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>
+            <tr><td>6</td><td>7</td><td>7</td><td>quarter_fraction_slab</td><td>highest</td></tr>
+            <tr><td>6</td><td>6</td><td>7</td><td>quarter_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>5</td><td>7</td><td>quarter_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>4</td><td>7</td><td>quarter_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>3</td><td>7</td><td>quarter_fraction</td><td>middle</td></tr>
+            <tr><td>6</td><td>2</td><td>7</td><td>quarter_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>1</td><td>7</td><td>quarter_fraction</td><td>normal</td></tr>
+            <tr><td>6</td><td>0</td><td>7</td><td>quarter_fraction</td><td>lowest</td></tr>
+        </table>
+        
+        <p>
+        <span concordion:execute="setColumnToAir(#xyz, #height)">Reset the column of air at
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        with height <span concordion:set="#height">100</span></span>.
+        
+        <span concordion:execute="setBlock(#xyz, #type)">Create the <span concordion:set="#type">tenth_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        </span>
+        </p>
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>
+            <tr><td>6</td><td>2</td><td>7</td><td>tenth_fraction</td><td>highest</td></tr>
+            <tr><td>6</td><td>1</td><td>7</td><td>tenth_fraction</td><td>middle</td></tr>
+            <tr><td>6</td><td>0</td><td>7</td><td>tenth_fraction</td><td>lowest</td></tr>
+        </table>
+        
+        <p>
+        <span concordion:execute="setColumnToAir(#xyz, #height)">Reset the column of air at
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        with height <span concordion:set="#height">100</span></span>.
+        
+        <span concordion:execute="setBlock(#xyz, #type)">Create the <span concordion:set="#type">fifteenth_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 0, 7)</span>
+        </span>
+        </p>
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>
+            <tr><td>6</td><td>1</td><td>7</td><td>fifteenth_fraction</td><td>highest</td></tr>
+            <tr><td>6</td><td>0</td><td>7</td><td>fifteenth_fraction</td><td>lowest</td></tr>
+        </table>
+        
+    </body>
+    
+</html>

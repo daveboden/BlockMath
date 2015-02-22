@@ -34,7 +34,7 @@ public class Registry {
 	public static final String FRACTION_JOIN_QUARTER_NAME = "QuarterJoin";
 	public static final FractionSlab FRACTION_SLAB_QUARTER = new FractionSlab(FRACTION_SLAB_QUARTER_NAME, 15, SLAB_MANAGER_QUARTER);
 	public static final FractionBlock FRACTION_BLOCK_QUARTER = new FractionBlock(FRACTION_BLOCK_QUARTER_NAME, 15, SLAB_MANAGER_QUARTER);
-	public static final FractionJoinBlock FRACTION_JOIN_QUARTER = new FractionJoinBlock(FRACTION_JOIN_QUARTER_NAME, 30, SLAB_MANAGER_QUARTER);
+	public static final FractionJoinBlock FRACTION_JOIN_QUARTER = new FractionJoinBlock(FRACTION_JOIN_QUARTER_NAME, 15, SLAB_MANAGER_QUARTER);
 	
 	public static final SlabManager SLAB_MANAGER_FIFTH = new SlabManager();
 	public static final String FRACTION_SLAB_FIFTH_NAME = "FifthSlab";
@@ -42,7 +42,7 @@ public class Registry {
 	public static final String FRACTION_JOIN_FIFTH_NAME = "FifthJoin";
 	public static final FractionSlab FRACTION_SLAB_FIFTH = new FractionSlab(FRACTION_SLAB_FIFTH_NAME, 12, SLAB_MANAGER_FIFTH);
 	public static final FractionBlock FRACTION_BLOCK_FIFTH = new FractionBlock(FRACTION_BLOCK_FIFTH_NAME, 12, SLAB_MANAGER_FIFTH);
-	public static final FractionJoinBlock FRACTION_JOIN_FIFTH = new FractionJoinBlock(FRACTION_JOIN_FIFTH_NAME, 30, SLAB_MANAGER_FIFTH);
+	public static final FractionJoinBlock FRACTION_JOIN_FIFTH = new FractionJoinBlock(FRACTION_JOIN_FIFTH_NAME, 12, SLAB_MANAGER_FIFTH);
 	
 	public static final SlabManager SLAB_MANAGER_SIXTH = new SlabManager();
 	public static final String FRACTION_SLAB_SIXTH_NAME = "SixthSlab";
@@ -50,7 +50,7 @@ public class Registry {
 	public static final String FRACTION_JOIN_SIXTH_NAME = "SixthJoin";
 	public static final FractionSlab FRACTION_SLAB_SIXTH = new FractionSlab(FRACTION_SLAB_SIXTH_NAME, 10, SLAB_MANAGER_SIXTH);
 	public static final FractionBlock FRACTION_BLOCK_SIXTH = new FractionBlock(FRACTION_BLOCK_SIXTH_NAME, 10, SLAB_MANAGER_SIXTH);
-	public static final FractionJoinBlock FRACTION_JOIN_SIXTH = new FractionJoinBlock(FRACTION_JOIN_SIXTH_NAME, 30, SLAB_MANAGER_SIXTH);
+	public static final FractionJoinBlock FRACTION_JOIN_SIXTH = new FractionJoinBlock(FRACTION_JOIN_SIXTH_NAME, 10, SLAB_MANAGER_SIXTH);
 	
 	public static final SlabManager SLAB_MANAGER_TENTH = new SlabManager();
 	public static final String FRACTION_SLAB_TENTH_NAME = "TenthSlab";
@@ -58,7 +58,7 @@ public class Registry {
 	public static final String FRACTION_JOIN_TENTH_NAME = "TenthJoin";
 	public static final FractionSlab FRACTION_SLAB_TENTH = new FractionSlab(FRACTION_SLAB_TENTH_NAME, 6, SLAB_MANAGER_TENTH);
 	public static final FractionBlock FRACTION_BLOCK_TENTH = new FractionBlock(FRACTION_BLOCK_TENTH_NAME, 6, SLAB_MANAGER_TENTH);
-	public static final FractionJoinBlock FRACTION_JOIN_TENTH = new FractionJoinBlock(FRACTION_JOIN_TENTH_NAME, 30, SLAB_MANAGER_TENTH);
+	public static final FractionJoinBlock FRACTION_JOIN_TENTH = new FractionJoinBlock(FRACTION_JOIN_TENTH_NAME, 6, SLAB_MANAGER_TENTH);
 	
 	public static final SlabManager SLAB_MANAGER_TWELTH = new SlabManager();
 	public static final String FRACTION_SLAB_TWELTH_NAME = "TwelthSlab";
@@ -66,7 +66,15 @@ public class Registry {
 	public static final String FRACTION_JOIN_TWELTH_NAME = "TwelthJoin";
 	public static final FractionSlab FRACTION_SLAB_TWELTH = new FractionSlab(FRACTION_SLAB_TWELTH_NAME, 5, SLAB_MANAGER_TWELTH);
 	public static final FractionBlock FRACTION_BLOCK_TWELTH = new FractionBlock(FRACTION_BLOCK_TWELTH_NAME, 5, SLAB_MANAGER_TWELTH);
-	public static final FractionJoinBlock FRACTION_JOIN_TWELTH = new FractionJoinBlock(FRACTION_JOIN_TWELTH_NAME, 30, SLAB_MANAGER_TWELTH);
+	public static final FractionJoinBlock FRACTION_JOIN_TWELTH = new FractionJoinBlock(FRACTION_JOIN_TWELTH_NAME, 5, SLAB_MANAGER_TWELTH);
+	
+	public static final SlabManager SLAB_MANAGER_FIFTEENTH = new SlabManager();
+	public static final String FRACTION_SLAB_FIFTEENTH_NAME = "FifteenthSlab";
+	public static final String FRACTION_BLOCK_FIFTEENTH_NAME = "FifteenthBlock";
+	public static final String FRACTION_JOIN_FIFTEENTH_NAME = "FifteenthJoin";
+	public static final FractionSlab FRACTION_SLAB_FIFTEENTH = new FractionSlab(FRACTION_SLAB_FIFTEENTH_NAME, 4, SLAB_MANAGER_FIFTEENTH);
+	public static final FractionBlock FRACTION_BLOCK_FIFTEENTH = new FractionBlock(FRACTION_BLOCK_FIFTEENTH_NAME, 4, SLAB_MANAGER_FIFTEENTH);
+	public static final FractionJoinBlock FRACTION_JOIN_FIFTEENTH = new FractionJoinBlock(FRACTION_JOIN_FIFTEENTH_NAME, 4, SLAB_MANAGER_FIFTEENTH);
 	
 
 	public static FractionSlab getSlabForJoinMetadata(int metadata) {
@@ -87,6 +95,8 @@ public class Registry {
 				return FRACTION_SLAB_TENTH;
 			case FractionJoinBlock.METADATA_JOIN_WITH_TWELTH_BLOCK:
 				return FRACTION_SLAB_TWELTH;
+			case FractionJoinBlock.METADATA_JOIN_WITH_FIFTEENTH_BLOCK:
+				return FRACTION_SLAB_FIFTEENTH;
 				
 				
 			default:
@@ -130,5 +140,9 @@ public class Registry {
 		GameRegistry.registerBlock(FRACTION_BLOCK_TWELTH, FRACTION_BLOCK_TWELTH_NAME);
 		GameRegistry.registerBlock(FRACTION_SLAB_TWELTH, FRACTION_SLAB_TWELTH_NAME);
 		GameRegistry.registerBlock(FRACTION_JOIN_TWELTH, FRACTION_JOIN_TWELTH_NAME);
+		
+		GameRegistry.registerBlock(FRACTION_BLOCK_FIFTEENTH, FRACTION_BLOCK_FIFTEENTH_NAME);
+		GameRegistry.registerBlock(FRACTION_SLAB_FIFTEENTH, FRACTION_SLAB_FIFTEENTH_NAME);
+		GameRegistry.registerBlock(FRACTION_JOIN_FIFTEENTH, FRACTION_JOIN_FIFTEENTH_NAME);
 	}
 }

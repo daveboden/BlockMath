@@ -49,6 +49,9 @@ public class FractionBlock extends Block {
 	public static final int METADATA_MIDDLE_BLOCK = 7;
 	public static final int METADATA_MIDDLE_UPPER_BLOCK = 8;
 	
+	private final Integer middleBlockIndex;
+	private final Integer middleUpperBlockIndex;
+	
 	public FractionBlock(String name, int numerator) {
 		this(name, numerator, null);
 	}
@@ -59,6 +62,21 @@ public class FractionBlock extends Block {
 		this.numerator = numerator;
 		this.heightInWholeBlocks = numerator / 2;
 		this.extraHalfBlock = (numerator % 2) == 1;
+		
+		if(heightInWholeBlocks > 2) {
+			this.middleBlockIndex = (heightInWholeBlocks - 1) / 2;
+			if(heightInWholeBlocks > 3 && (heightInWholeBlocks % 2 == 0)) {
+				//A middle_upper block is only required for fraction blocks
+				//that are an even number of blocks in height
+				this.middleUpperBlockIndex = middleBlockIndex + 1;
+			} else {
+				this.middleUpperBlockIndex = null;
+			}
+		} else {
+			this.middleBlockIndex = null;
+			this.middleUpperBlockIndex = null;
+		}
+		
 		//Register this block with the slab manager
 		this.slabManager = slabManager;
 		slabManager.setBlock(this);
@@ -123,8 +141,16 @@ public class FractionBlock extends Block {
 			slabPlacedAtBottom = false;
 		}
 		
-		for(int i = 1; i < heightInWholeBlocks - 1; i++) {    			
-			world.setBlock(x, y + i, z, this, METADATA_NORMAL_BLOCK, 3);
+		for(int i = 1; i < heightInWholeBlocks - 1; i++) {
+			int blockMetadata;
+			if(middleBlockIndex != null && i == middleBlockIndex) {
+				blockMetadata = METADATA_MIDDLE_BLOCK;
+			} else if(middleUpperBlockIndex != null && i == middleUpperBlockIndex) {
+				blockMetadata = METADATA_MIDDLE_UPPER_BLOCK;
+			} else {
+				blockMetadata = METADATA_NORMAL_BLOCK;
+			}
+			world.setBlock(x, y + i, z, this, blockMetadata, 3);
 		}
 		
 		if(extraHalfBlock && !slabPlacedAtBottom) {
@@ -158,6 +184,8 @@ public class FractionBlock extends Block {
     public IIcon getIcon(int side, int metadata) {
     	switch(metadata) {
 	    	case METADATA_ZERO_FOR_CREATIVE_TAB_ICON:
+	    		return icon0;
+	    	case METADATA_MIDDLE_BLOCK:
 	    		return icon0;
 	    	default:
 	    		return icon;

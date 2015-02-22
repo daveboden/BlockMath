@@ -25,12 +25,16 @@ public class BlockStatic {
 		blocksByName.put("air", air);
 		blocksByName.put("stone", stone);
 		blocksByName.put("whole_fraction", Registry.FRACTION_BLOCK_WHOLE);
+		blocksByName.put("half_fraction", Registry.FRACTION_BLOCK_HALF);
 		blocksByName.put("quarter_fraction", Registry.FRACTION_BLOCK_QUARTER);
 		blocksByName.put("quarter_fraction_slab", Registry.FRACTION_SLAB_QUARTER);
 		blocksByName.put("quarter_fraction_join", Registry.FRACTION_JOIN_QUARTER);
 		blocksByName.put("tenth_fraction", Registry.FRACTION_BLOCK_TENTH);
 		blocksByName.put("tenth_fraction_slab", Registry.FRACTION_SLAB_TENTH);
 		blocksByName.put("tenth_fraction_join", Registry.FRACTION_JOIN_TENTH);
+		blocksByName.put("fifteenth_fraction", Registry.FRACTION_BLOCK_FIFTEENTH);		
+		blocksByName.put("fifteenth_fraction_slab", Registry.FRACTION_SLAB_FIFTEENTH);		
+		blocksByName.put("fifteenth_fraction_join", Registry.FRACTION_JOIN_FIFTEENTH);		
 		
 	}
 }

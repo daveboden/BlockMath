@@ -33,6 +33,13 @@ public abstract class ConcordionBlockTestBase {
 		
 	}
 	
+	public void setColumnToAir(String xyzString, int height) {
+		XYZ xyz = parseXYZ(xyzString);
+		for(int i = 0; i < height; i++) {
+			stubWorld.setBlockToAir(xyz.x, xyz.y + i, xyz.z);
+		}
+	}
+	
 	public void setBlock(String xyzString, String type) {
 		XYZ xyz = parseXYZ(xyzString);
 		setBlock(xyz.getX(), xyz.getY(), xyz.getZ(), type);
@@ -69,7 +76,13 @@ public abstract class ConcordionBlockTestBase {
 					break;
 				case FractionBlock.METADATA_NORMAL_BLOCK:
 					metadataString = "normal";
-					break;					
+					break;				
+				case FractionBlock.METADATA_MIDDLE_BLOCK:
+					metadataString = "middle";
+					break;				
+				case FractionBlock.METADATA_MIDDLE_UPPER_BLOCK:
+					metadataString = "middle_upper";
+					break;				
 				default:
 					metadataString = Integer.toString(data.getMetadata());
 			}

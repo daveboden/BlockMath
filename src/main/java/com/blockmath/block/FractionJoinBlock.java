@@ -1,5 +1,7 @@
 package com.blockmath.block;
 
+import java.util.Map.Entry;
+
 import lombok.Getter;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -32,19 +34,20 @@ public class FractionJoinBlock extends Block {
 
 	private final SlabManager slabManager;
 	
-	private IIcon icon8;
+	private IIcon[] icons = new IIcon[16];
 	
-	public static final int METADATA_JOIN_WITH_WHOLE_BLOCK = 5;
-	public static final int METADATA_JOIN_WITH_HALF_BLOCK = 6;
-	public static final int METADATA_JOIN_WITH_THIRD_BLOCK = 7;
-	public static final int METADATA_JOIN_WITH_QUARTER_BLOCK = 8;
-	public static final int METADATA_JOIN_WITH_FIFTH_BLOCK = 9;
-	public static final int METADATA_JOIN_WITH_SIXTH_BLOCK = 10;
-	public static final int METADATA_JOIN_WITH_TENTH_BLOCK = 11;
-	public static final int METADATA_JOIN_WITH_TWELTH_BLOCK = 12;
-	public static final int METADATA_JOIN_WITH_FIFTEENTH_BLOCK = 13;
-	public static final int METADATA_JOIN_WITH_TWENTIETH_BLOCK = 14;
-	public static final int METADATA_JOIN_WITH_THIRTIETH_BLOCK = 15;
+	public static final int METADATA_JOIN_WITH_WHOLE_BLOCK = 3;
+	public static final int METADATA_JOIN_WITH_HALF_BLOCK = 4;
+	public static final int METADATA_JOIN_WITH_THIRD_BLOCK = 5;
+	public static final int METADATA_JOIN_WITH_QUARTER_BLOCK = 6;
+	public static final int METADATA_JOIN_WITH_FIFTH_BLOCK = 7;
+	public static final int METADATA_JOIN_WITH_SIXTH_BLOCK = 8;
+	public static final int METADATA_JOIN_WITH_TENTH_BLOCK = 9;
+	public static final int METADATA_JOIN_WITH_TWELTH_BLOCK = 10;
+	public static final int METADATA_JOIN_WITH_FIFTEENTH_BLOCK = 11;
+	public static final int METADATA_JOIN_WITH_TWENTIETH_BLOCK = 12;
+	public static final int METADATA_JOIN_WITH_THIRTIETH_BLOCK = 13;
+	public static final int METADATA_JOIN_WITH_SIXTIETH_BLOCK = 14;
 	
 	public static final BiMap<Integer, Integer> MAP_METADATA_HEIGHT_TO_JOIN_CODE = HashBiMap.create();
 	static {
@@ -77,19 +80,17 @@ public class FractionJoinBlock extends Block {
     
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
-    	icon8 = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name + 8);
+    	for(Entry<Integer, Integer> entry : MAP_METADATA_HEIGHT_TO_JOIN_CODE.entrySet()) {
+    		int metadata = entry.getValue(); 
+    		icons[metadata] = iconRegister.registerIcon(BlockMathMod.MODID + ":" + name + metadata); 
+    	}
     }
     
     
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int metadata) {
-    	switch(metadata) {
-	    	case METADATA_JOIN_WITH_QUARTER_BLOCK:
-	    		return icon8;
-	    	default:
-	    		return null;
-    	}
+    	return icons[metadata];
     }
 
     //TODO - explosions

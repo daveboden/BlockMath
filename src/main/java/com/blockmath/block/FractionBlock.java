@@ -218,7 +218,7 @@ public class FractionBlock extends Block {
     	if(metadata != METADATA_HIGHEST_BLOCK) {
     		for(int currentY = y + 1; currentY <= world.getHeight(); currentY++) {
     			Block block = world.getBlock(x, currentY, z);
-    			boolean fractionBlock = block instanceof FractionBlock || block instanceof FractionSlab;
+    			boolean fractionBlock = block instanceof FractionBlock || block instanceof FractionJoinBlock || block instanceof FractionSlab;
     			if(!fractionBlock) {
     				//Shouldn't happen. We shouldn't run out of fraction blocks before we've hit the labelled highest block
     				break;

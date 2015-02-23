@@ -76,6 +76,29 @@ public class Registry {
 	public static final FractionBlock FRACTION_BLOCK_FIFTEENTH = new FractionBlock(FRACTION_BLOCK_FIFTEENTH_NAME, 4, SLAB_MANAGER_FIFTEENTH);
 	public static final FractionJoinBlock FRACTION_JOIN_FIFTEENTH = new FractionJoinBlock(FRACTION_JOIN_FIFTEENTH_NAME, 4, SLAB_MANAGER_FIFTEENTH);
 	
+	public static final SlabManager SLAB_MANAGER_TWENTIETH = new SlabManager();
+	public static final String FRACTION_SLAB_TWENTIETH_NAME = "TwentiethSlab";
+	public static final String FRACTION_BLOCK_TWENTIETH_NAME = "TwentiethBlock";
+	public static final String FRACTION_JOIN_TWENTIETH_NAME = "TwentiethJoin";
+	public static final FractionSlab FRACTION_SLAB_TWENTIETH = new FractionSlab(FRACTION_SLAB_TWENTIETH_NAME, 3, SLAB_MANAGER_TWENTIETH);
+	public static final FractionBlock FRACTION_BLOCK_TWENTIETH = new FractionBlock(FRACTION_BLOCK_TWENTIETH_NAME, 3, SLAB_MANAGER_TWENTIETH);
+	public static final FractionJoinBlock FRACTION_JOIN_TWENTIETH = new FractionJoinBlock(FRACTION_JOIN_TWENTIETH_NAME, 3, SLAB_MANAGER_TWENTIETH);
+
+	public static final SlabManager SLAB_MANAGER_THIRTIETH = new SlabManager();
+	public static final String FRACTION_SLAB_THIRTIETH_NAME = "ThirtiethSlab";
+	public static final String FRACTION_BLOCK_THIRTIETH_NAME = "ThirtiethBlock";
+	public static final String FRACTION_JOIN_THIRTIETH_NAME = "ThirtiethJoin";
+	public static final FractionSlab FRACTION_SLAB_THIRTIETH = new FractionSlab(FRACTION_SLAB_THIRTIETH_NAME, 2, SLAB_MANAGER_THIRTIETH);
+	public static final FractionBlock FRACTION_BLOCK_THIRTIETH = new FractionBlock(FRACTION_BLOCK_THIRTIETH_NAME, 2, SLAB_MANAGER_THIRTIETH);
+	public static final FractionJoinBlock FRACTION_JOIN_THIRTIETH = new FractionJoinBlock(FRACTION_JOIN_THIRTIETH_NAME, 2, SLAB_MANAGER_THIRTIETH);
+
+	public static final SlabManager SLAB_MANAGER_SIXTIETH = new SlabManager();
+	public static final String FRACTION_SLAB_SIXTIETH_NAME = "SixtiethSlab";
+	public static final String FRACTION_BLOCK_SIXTIETH_NAME = "SixtiethBlock";
+	public static final String FRACTION_JOIN_SIXTIETH_NAME = "SixtiethJoin";
+	public static final FractionSlab FRACTION_SLAB_SIXTIETH = new FractionSlab(FRACTION_SLAB_SIXTIETH_NAME, 1, SLAB_MANAGER_SIXTIETH);
+	public static final FractionBlock FRACTION_BLOCK_SIXTIETH = new FractionBlock(FRACTION_BLOCK_SIXTIETH_NAME, 1, SLAB_MANAGER_SIXTIETH);
+	public static final FractionJoinBlock FRACTION_JOIN_SIXTIETH = new FractionJoinBlock(FRACTION_JOIN_SIXTIETH_NAME, 1, SLAB_MANAGER_SIXTIETH);	
 
 	public static FractionSlab getSlabForJoinMetadata(int metadata) {
 		switch(metadata) {
@@ -97,6 +120,12 @@ public class Registry {
 				return FRACTION_SLAB_TWELTH;
 			case FractionJoinBlock.METADATA_JOIN_WITH_FIFTEENTH_BLOCK:
 				return FRACTION_SLAB_FIFTEENTH;
+			case FractionJoinBlock.METADATA_JOIN_WITH_TWENTIETH_BLOCK:
+				return FRACTION_SLAB_TWENTIETH;
+			case FractionJoinBlock.METADATA_JOIN_WITH_THIRTIETH_BLOCK:
+				return FRACTION_SLAB_THIRTIETH;
+			case FractionJoinBlock.METADATA_JOIN_WITH_SIXTIETH_BLOCK:
+				return FRACTION_SLAB_SIXTIETH;
 				
 				
 			default:
@@ -144,5 +173,17 @@ public class Registry {
 		GameRegistry.registerBlock(FRACTION_BLOCK_FIFTEENTH, FRACTION_BLOCK_FIFTEENTH_NAME);
 		GameRegistry.registerBlock(FRACTION_SLAB_FIFTEENTH, FRACTION_SLAB_FIFTEENTH_NAME);
 		GameRegistry.registerBlock(FRACTION_JOIN_FIFTEENTH, FRACTION_JOIN_FIFTEENTH_NAME);
+		
+		GameRegistry.registerBlock(FRACTION_BLOCK_TWENTIETH, FRACTION_BLOCK_TWENTIETH_NAME);
+		GameRegistry.registerBlock(FRACTION_SLAB_TWENTIETH, FRACTION_SLAB_TWENTIETH_NAME);
+		GameRegistry.registerBlock(FRACTION_JOIN_TWENTIETH, FRACTION_JOIN_TWENTIETH_NAME);
+		
+		GameRegistry.registerBlock(FRACTION_BLOCK_THIRTIETH, FRACTION_BLOCK_THIRTIETH_NAME);
+		GameRegistry.registerBlock(FRACTION_SLAB_THIRTIETH, FRACTION_SLAB_THIRTIETH_NAME);
+		GameRegistry.registerBlock(FRACTION_JOIN_THIRTIETH, FRACTION_JOIN_THIRTIETH_NAME);
+		
+		GameRegistry.registerBlock(FRACTION_BLOCK_SIXTIETH, FRACTION_BLOCK_SIXTIETH_NAME);
+		GameRegistry.registerBlock(FRACTION_SLAB_SIXTIETH, FRACTION_SLAB_SIXTIETH_NAME);
+		GameRegistry.registerBlock(FRACTION_JOIN_SIXTIETH, FRACTION_JOIN_SIXTIETH_NAME);
 	}
 }

@@ -21,6 +21,8 @@ public class BlockStatic {
 	public static final BlockStone stone = new BlockStone();
 	
 	public static BiMap<String, Block> blocksByName = HashBiMap.create();
+	
+	//TODO fold these friendly names into the registry
 	static {
 		blocksByName.put("air", air);
 		blocksByName.put("stone", stone);

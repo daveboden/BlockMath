@@ -21,9 +21,6 @@ import cpw.mods.fml.relauncher.SideOnly;
  * More metadata will be added to label the middle of the block so that it can be specially
  * decorated with numbers and fraction values.
  * 
- * TODO allow blocks to be placed underneath existing blocks. These will have to be created from the top down and, 
- *      taking slabs into consideration, the bottom and top of a fraction block can a special joined 2slab block.
- * 
  * TODO Teleport the user to the top of a superblock if they've jumped and placed the block under them. Otherwise they
  *      end up in the block and get slowly pushed to the side. The screen goes black for a second or so.
  */

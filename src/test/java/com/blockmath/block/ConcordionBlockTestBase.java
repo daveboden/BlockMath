@@ -23,14 +23,7 @@ public abstract class ConcordionBlockTestBase {
 	
 	public void setBlock(int x, int y, int z, String type) {
 		Block block = BlockStatic.blocksByName.get(type);
-		stubWorld.setBlock(x, y, z, block);
-		//TODO refactor this metadata update into the mock and stub Worlds rather than this test
-		int side = 0;
-		int hitX = 0, hitY = 0, hitZ = 0; 
-		int metadata = 0;
-		int metadataOut = block.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, metadata);
-		stubWorld.setMetadata(x, y, z, metadataOut);
-		
+		world.setBlock(x, y, z, block);
 	}
 	
 	public void setColumnToAir(String xyzString, int height) {

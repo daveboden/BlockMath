@@ -67,6 +67,24 @@ public class StubWorldFactory {
 			}
 		});
 		
+		when(world.setBlock(xCap.capture(), yCap.capture(), zCap.capture(),
+	            blockCap.capture())).thenAnswer(new Answer<Boolean>() {
+			@Override
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
+				int x = xCap.getValue();
+				int y = yCap.getValue();
+				int z = zCap.getValue();
+				Block block = blockCap.getValue();
+				
+				stubWorld.setBlock(x, y, z, block);
+				int side = 0;
+				int hitX = 0, hitY = 0, hitZ = 0; 
+				int metadata = 0;
+				int metadataOut = block.onBlockPlaced((World)invocation.getMock(), x, y, z, side, hitX, hitY, hitZ, metadata);
+				return stubWorld.setMetadata(x, y, z, metadataOut);
+			}
+		});
+		
 		when(world.setBlockMetadataWithNotify(xCap.capture(), yCap.capture(), zCap.capture(), metaCap.capture(), Matchers.anyInt())).then(new Answer<Boolean>() {
 			@Override
 			public Boolean answer(InvocationOnMock invocation) throws Throwable {

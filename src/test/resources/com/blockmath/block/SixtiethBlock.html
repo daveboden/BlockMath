@@ -1,0 +1,44 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+    <head>
+        <link href="../concordion.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <h1>Stack two sixtieth blocks on top of each other</h1>
+        <p>
+        Start with air blocks
+        
+        <table concordion:execute="setBlock(#x, #y, #z, #type)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:set="#type">Type</th>
+            </tr>            
+            <tr><td>6</td><td>31</td><td>7</td><td>stone</td></tr>
+            <tr><td>6</td><td>30</td><td>7</td><td>air</td></tr>
+            <tr><td>6</td><td>29</td><td>7</td><td>stone</td></tr>
+        </table>
+        </p>
+        
+        <p><span concordion:execute="setBlock(#xyz, #type)">Create a <span concordion:set="#type">sixtieth_fraction</span> superblock at 
+        <span concordion:set="#xyz">(6, 30, 7)</span>
+        </span>
+        
+        <table concordion:execute="#result = getBlock(#x, #y, #z)">
+            <tr>
+                <th concordion:set="#x">x</th>
+                <th concordion:set="#y">y</th>
+                <th concordion:set="#z">z</th>
+                <th concordion:assertEquals="#result.type">Type</th>
+                <th concordion:assertEquals="#result.metadata">Metadata value</th>
+            </tr>            
+            <tr><td>6</td><td>31</td><td>7</td><td>stone</td><td>0</td></tr>
+            <tr><td>6</td><td>30</td><td>7</td><td>sixtieth_fraction_slab</td><td>lowest_and_highest</td></tr>
+            <tr><td>6</td><td>29</td><td>7</td><td>stone</td><td>0</td></tr>
+        </table>
+        </p>
+    </body>
+    
+</html>

@@ -1,0 +1,12 @@
+If you are using Intellij 14 or later you need to add the following to the end of your build.gradle before importing:
+
+idea { module { inheritOutputDirs = true } }
+
+If you don't do that, your assets will not work. (Thanks to SanAndreasP for finding this solution)
+
+
+All that is left to do are the run configurations, so that you can actually start Minecraft. For those again open the Gradle sidebar and run the
+genIntellijRuns
+task. Intellij will now ask to reload the project, click OK.
+
+In most recent versions of IntelliJ you now have to go into Run > Edit Configurations and adjust both run configurations to say Use Classpath of Module _main.

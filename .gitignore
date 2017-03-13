@@ -21,3 +21,6 @@
 /saves/
 /usernamecache.json
 /screenshots/
+/out/
+.idea/
+/mods/
